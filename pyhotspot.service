@@ -1,0 +1,29 @@
+[Unit]
+Description=Pi Hotspot Switch Service
+After=network-online.target NetworkManager.service
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=root
+Group=root
+ExecStart=/usr/bin/python3 /opt/rpi-hotspot/pyhotspot.py
+WorkingDirectory=/opt/rpi-hotspot
+Restart=always
+RestartSec=10
+StandardOutput=journal
+StandardError=journal
+KillMode=process
+TimeoutStopSec=30
+
+# Environment variables
+Environment=PYTHONUNBUFFERED=1
+
+# Security settings
+PrivateTmp=yes
+NoNewPrivileges=yes
+ProtectSystem=strict
+ReadWritePaths=/opt/rpi-hotspot /var/log /run
+
+[Install]
+WantedBy=multi-user.target
