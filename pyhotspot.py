@@ -89,6 +89,9 @@ def start_hotspot():
 
     else:
         print(f"{RED}ERROR: Hotspot start failed!{RESET}")
+        if HAS_LED:
+            strip.setPixelColor(0, Color(10, 0, 0))   # Red to indicate error
+            strip.show()
 
 def stop_hotspot():
     #Stop hotspot and activate normal WiFi.#
@@ -111,6 +114,9 @@ def stop_hotspot():
             strip.show()
     else:
         print(f"{RED}ERROR: Normal WiFi could not be activated!{RESET}")
+        if HAS_LED:
+            strip.setPixelColor(0, Color(10, 0, 0))   # Red to indicate error
+            strip.show()
 
 def sync_state(pin_state):
     #Sync network state with switch position.#
@@ -153,6 +159,11 @@ def main():
             
             if pin_state != current_state:
                 # Simple debouncing
+
+                if HAS_LED:
+                    strip.setPixelColor(0, Color(10, 10, 0))  #yellow for state change
+                    strip.show()
+
                 time.sleep(0.1)
                 if GPIO.input(PIN) == pin_state:  # Confirm state
                     print(f"Switch changed to: {GREEN + 'ON' if pin_state else RED + 'OFF'}{RESET}")
@@ -169,15 +180,14 @@ def main():
     except KeyboardInterrupt:
         print(f"{YELLOW}Service stopped{RESET}")
 
-        if HAS_LED:
-            strip.setPixelColor(0, Color(0, 0, 0))  # 
-            strip.show()
-
     finally:
         GPIO.cleanup()
-
+        if HAS_LED:
+            strip.setPixelColor(0, Color(0, 0, 0))  #turn off LED at the end
+            strip.show()
+            
 def test_gpio():
-    #GPIO test.#
+    #GPIO test.
     print(f"{BLUE}GPIO test (CTRL-C to stop)...{RESET}")
     GPIO.setmode(GPIO.BCM)
     GPIO.setup(PIN, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)

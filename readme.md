@@ -76,6 +76,7 @@ sudo python3 /opt/rpi-hotspot/pyhotspot.py test
 ### LED Status (if enabled)
 - 🟢 **Green** - Normal WiFi connected
 - 🔵 **Blue** - Hotspot active
+- 🟡 **Yellow** - Switching
 - 🔴 **Red** - Error state
 
 ## How It Works
